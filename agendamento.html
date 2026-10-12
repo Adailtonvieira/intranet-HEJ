@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agendamento de Auditório - HEJ</title>
+  <link rel="icon" type="image/png" href="Nova Logo HEJ Reduzido Branco.png">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      color: #333;
+    }
+
+    header {
+      background: #00766f;
+      color: white;
+      margin-bottom: 40px;
+      position: relative;
+      box-shadow: 0 4px 20px rgba(0, 118, 111, 0.3);
+    }
+
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: #FFD700;
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 110px;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .header-text h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+
+    .header-text p {
+      margin: 0;
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .page-title {
+      text-align: center;
+      color: #00766f;
+      margin-bottom: 30px;
+      font-size: 2rem;
+    }
+
+    .info-box {
+      background: #e8f5f4;
+      border-left: 4px solid #00766f;
+      padding: 15px 20px;
+      margin-bottom: 30px;
+      border-radius: 4px;
+    }
+
+    .info-box h3 {
+      color: #00766f;
+      margin-bottom: 10px;
+    }
+
+    .info-box ul {
+      margin-left: 20px;
+      line-height: 1.8;
+    }
+
+    .booking-form {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .form-group label .required {
+      color: #e74c3c;
+      margin-left: 3px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-family: Arial, sans-serif;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #00766f;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .submit-btn {
+      background: #00766f;
+      color: white;
+      padding: 14px 30px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.3s;
+    }
+
+    .submit-btn:hover {
+      background: #005a54;
+    }
+
+    .submit-btn:active {
+      transform: scale(0.98);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      max-width: 500px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+    }
+
+    .modal-content h2 {
+      color: #00766f;
+      margin-bottom: 15px;
+    }
+
+    .modal-content p {
+      line-height: 1.6;
+      margin-bottom: 25px;
+    }
+
+    .modal-btn {
+      background: #00766f;
+      color: white;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .modal-btn:hover {
+      background: #005a54;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: #00766f;
+      margin-top: 60px;
+      border-top: 2px solid #ddd;
+    }
+
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+      }
+
+      .header-left {
+        flex-direction: column;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .page-title {
+        font-size: 1.5rem;
+      }
+    }
+
+    .calendar-section {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .calendar-header h3 {
+      color: #00766f;
+      font-size: 1.5rem;
+    }
+
+    .calendar-nav {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .calendar-nav button {
+      background: #00766f;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+
+    .calendar-nav button:hover {
+      background: #005a54;
+    }
+
+    .calendar-month {
+      font-weight: 600;
+      color: #00766f;
+      min-width: 15px;
+      text-align: center;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      margin-bottom: 30px;
+    }
+
+    .calendar-day-header {
+      text-align: center;
+      font-weight: 600;
+      color: #00766f;
+      padding: 10px;
+      font-size: 0.9rem;
+    }
+
+    .calendar-day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 500;
+      position: relative;
+    }
+
+    .calendar-day:hover {
+      border-color: #00766f;
+      background: #f0f9f8;
+    }
+
+    .calendar-day.disabled {
+      color: #ccc;
+      cursor: not-allowed;
+      background: #f9f9f9;
+    }
+
+    .calendar-day.disabled:hover {
+      border-color: #e0e0e0;
+      background: #f9f9f9;
+    }
+
+    .calendar-day.selected {
+      background: #00766f;
+      color: white;
+      border-color: #00766f;
+    }
+
+    .calendar-day.has-bookings::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      width: 6px;
+      height: 6px;
+      background: #f39c12;
+      border-radius: 50%;
+    }
+
+    .calendar-day.selected.has-bookings::after {
+      background: #FFD700;
+    }
+
+    .calendar-day.in-range {
+      background: #d4edda;
+      color: #155724;
+      border-color: #27ae60;
+      font-weight: bold;
+    }
+
+    .time-slots-section {
+      display: none;
+      margin-top: 30px;
+      padding-top: 30px;
+      border-top: 2px solid #e0e0e0;
+    }
+
+    .time-slots-section.active {
+      display: block;
+    }
+
+    .time-slots-header {
+      color: #00766f;
+      margin-bottom: 20px;
+      font-size: 1.3rem;
+    }
+
+    .time-slots-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .time-slot {
+      padding: 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 600;
+    }
+
+    .time-slot:hover {
+      border-color: #00766f;
+      background: #f0f9f8;
+    }
+
+    .time-slot.selected {
+      background: #d4edda;
+      color: #155724;
+      border-color: #27ae60;
+      font-weight: bold;
+    }
+
+    .time-slot.in-range {
+      background: #4CAF50;
+      color: white;
+      border-color: #388E3C;
+      font-weight: bold;
+    }
+
+    .time-slot.occupied {
+      background: #f8d7da;
+      color: #721c24;
+      border-color: #f5c6cb;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    .time-slot.occupied:hover {
+      background: #f8d7da;
+      border-color: #f5c6cb;
+    }
+
+    .time-slot.pending {
+      background: #fff3cd;
+      color: #856404;
+      border-color: #ffeaa7;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    .time-slot.pending:hover {
+      background: #fff3cd;
+      border-color: #ffeaa7;
+    }
+
+    .time-slot-status {
+      font-size: 0.75rem;
+      margin-top: 5px;
+      opacity: 0.8;
+    }
+
+    .sync-notification {
+      background: #00766f;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      text-align: center;
+      display: none;
+    }
+
+    .sync-notification.show {
+      display: block;
+      animation: fadeInOut 3s ease-in-out;
+    }
+
+    @keyframes fadeInOut {
+
+      0%,
+      100% {
+        opacity: 0;
+      }
+
+      10%,
+      90% {
+        opacity: 1;
+      }
+    }
+
+    .time-range-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .time-range-info {
+      background: #e8f5f4;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: 600;
+      color: #00766f;
+    }
+
+    .multi-day-section {
+      background: #fff3cd;
+      border: 1px solid #ffeaa7;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .multi-day-section.active {
+      display: block;
+    }
+
+    .multi-day-info {
+      color: #856404;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .validation-error {
+      color: #e74c3c;
+      font-size: 0.9rem;
+      margin-top: 5px;
+      display: none;
+    }
+
+    .validation-error.show {
+      display: block;
+    }
+
+    .date-range-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .time-slot.occupied {
+      background: #f8d7da;
+      color: #721c24;
+      border-color: #f5c6cb;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    .time-slot.occupied:hover {
+      background: #f8d7da;
+      border-color: #f5c6cb;
+    }
+
+    .time-slot.pending {
+      background: #fff3cd;
+      color: #856404;
+      border-color: #ffeaa7;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    .time-slot.pending:hover {
+      background: #fff3cd;
+      border-color: #ffeaa7;
+    }
+
+    .calendar-day.has-bookings::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      width: 6px;
+      height: 6px;
+      background: #f39c12;
+      border-radius: 50%;
+    }
+
+    .calendar-day.selected.has-bookings::after {
+      background: #FFD700;
+    }
+
+    .time-slots-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .time-slot {
+      padding: 12px 8px;
+      border: 2px solid #e0e0e0;
+      border-radius: 6px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 500;
+      background: white;
+      position: relative;
+    }
+
+    .time-slot:hover {
+      border-color: #00766f;
+      background: #f0f9f8;
+    }
+
+    .time-slot.selected {
+      background: #4CAF50;
+      color: white;
+      border-color: #388E3C;
+      font-weight: bold;
+    }
+
+    .time-slot.in-range {
+      background: #4CAF50;
+      color: white;
+      border-color: #388E3C;
+      font-weight: bold;
+    }
+
+    .time-slot.range-start {
+      background: #2E7D32;
+      color: white;
+      border-color: #1B5E20;
+      font-weight: bold;
+    }
+
+    .time-slot.range-end {
+      background: #2E7D32;
+      color: white;
+      border-color: #1B5E20;
+      font-weight: bold;
+    }
+
+    .time-slot.occupied {
+      background: #f8d7da;
+      color: #721c24;
+      border-color: #f5c6cb;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    .time-slot.pending {
+      background: #fff3cd;
+      color: #856404;
+      border-color: #ffeaa7;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    .time-slot-status {
+      font-size: 0.7rem;
+      margin-top: 4px;
+      opacity: 0.8;
+    }
+
+    .time-range-info {
+      background: #e8f5f4;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: 600;
+      color: #00766f;
+      border-left: 4px solid #00766f;
+    }
+
+    /* Destaque para intervalo contínuo */
+    .time-slot.range-continuous {
+      background: linear-gradient(135deg, #4CAF50, #45a049);
+      color: white;
+      border-color: #388E3C;
+    }
+  </style>
+</head>
+
+<body>
+  </style>
+  </head>
+
+  <body>
+
+    <header>
+      
+      <div class="header-content">
+      <div class="header-left">
+        <div class="logo" onclick="location.reload()" title="Clique para atualizar a página">
+           <img src="HEJ.png" alt="Logo HEJ"alt="PEP MV" style="width: 120px; height: 50px; display: block; margin: 0 auto;">
+        </div>
+          <div class="header-text">
+            <h1>Agendamento de Auditório</h1>
+            <p>Hospital Estadual de Jataí</p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+
+      <div class="sync-notification" id="syncNotification">
+        Atualizando status dos agendamentos...
+      </div>
+
+      <div class="info-box">
+        <h3>Informações Importantes</h3>
+        <ul>
+          <li>Todas as solicitações precisam ser analisadas pela administração</li>
+          <li>O horário só será reservado após a aprovação</li>
+          <li>Você receberá notificação por e-mail sobre o status da sua solicitação</li>
+          <li>Preencha todos os campos obrigatórios marcados com <span style="color: #e74c3c;">*</span></li>
+          <li><strong>Dica:</strong> Para reservas multi-dia, selecione data de término diferente da data de início</li>
+          <li><strong>Dica:</strong> Se o seu evento acaba depois de 23:59h é considerado uma reserva multi-dia</li>
+          <li><strong>Atenção:</strong> Verifique a autenticidade de suas informações de contato</li>
+        </ul>
+      </div>
+
+      <div class="calendar-section">
+        <div class="calendar-header">
+          <h3>Selecione a Data e Horário</h3>
+          <div class="calendar-nav">
+            <button onclick="mudarMes(-1)">☚ Anterior</button>
+            <div class="calendar-month" id="calendarMonth"></div>
+            <button onclick="mudarMes(1)">Próximo ☛</button>
+          </div>
+        </div>
+
+        <div class="calendar-grid" id="calendarGrid">
+        </div>
+
+        <div class="date-range-selector">
+          <div class="form-group">
+            <label for="data_inicio">Data de Início<span class="required">*</span></label>
+            <input type="date" id="data_inicio" name="data_inicio" required>
+          </div>
+          <div class="form-group">
+            <label for="data_fim">Data de Término<span class="required">*</span></label>
+            <input type="date" id="data_fim" name="data_fim" required>
+            <div class="validation-error" id="dataFimError">A data de término deve ser posterior ou igual à data de
+              início</div>
+          </div>
+        </div>
+
+        <div class="time-slots-section" id="timeSlotsSection">
+          <h6 class="time-slots-header">Selecione o Intervalo de Horários</h6>
+
+          <div class="time-range-selector">
+            <div class="form-group">
+              <label for="horario_inicio">Horário de Início<span class="required">*</span></label>
+              <select id="horario_inicio" name="horario_inicio" required>
+                <option value="">Selecione o início</option>
+                <!-- Horários serão preenchidos via JavaScript -->
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="horario_fim">Horário de Término<span class="required">*</span></label>
+              <select id="horario_fim" name="horario_fim" required>
+                <option value="">Selecione o término</option>
+                <!-- Horários serão preenchidos via JavaScript -->
+              </select>
+              <div class="validation-error" id="horarioFimError">O horário de término deve ser posterior ao horário de
+                início</div>
+            </div>
+          </div>
+
+          <div class="time-range-info" id="timeRangeInfo" style="display: none;">
+            Intervalo selecionado: <span id="selectedRange"></span>
+          </div>
+
+          <div class="time-slots-grid" id="timeSlotsGrid">
+            <!-- Visualização dos horários será gerada aqui -->
+          </div>
+        </div>
+      </div>
+
+      <div class="booking-form">
+        <h2 style="color: #00766f; margin-bottom: 25px; text-align: center;">
+          Dados da Solicitação
+        </h2>
+
+        <form id="bookingForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nome">Nome Completo<span class="required">*</span></label>
+              <input type="text" id="nome" name="nome" required placeholder="Digite seu nome completo">
+            </div>
+
+            <div class="form-group">
+              <label for="setor">Setor<span class="required">*</span></label>
+              <input type="text" id="setor" name="setor" required placeholder="Ex: Enfermagem, TI, Administrativo">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="celular">Celular<span class="required">*</span></label>
+              <input type="tel" id="celular" name="celular" required placeholder="(00) 00000-0000">
+            </div>
+
+            <div class="form-group">
+              <label for="email">E-mail<span class="required">*</span></label>
+              <input type="email" id="email" name="email" required placeholder="seu.email@exemplo.com">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="descricao">Descrição do Evento/Uso<span class="required">*</span></label>
+            <textarea id="descricao" name="descricao" required
+              placeholder="Descreva o motivo do uso do auditório, tipo de evento, número estimado de participantes, etc."></textarea>
+          </div>
+
+          <button type="submit" class="submit-btn" id="submitBtn">
+            Enviar Solicitação de Agendamento
+          </button>
+        </form>
+      </div>
+
+    </div>
+
+    <div class="modal" id="successModal">
+      <div class="modal-content">
+        <div class="modal-icon">✅</div>
+        <h2>Solicitação Enviada!</h2>
+        <p>
+          Sua solicitação de agendamento foi enviada com sucesso e está
+          <strong>aguardando aprovação</strong> do administrador.
+        </p>
+        <p>
+          Você receberá um retorno sobre a confirmação ou recusa do agendamento.
+        </p>
+        <button class="modal-btn" onclick="fecharModalEResetar()">Entendi</button>
+      </div>
+    </div>
+
+    <footer>
+      <img src="https://indicadores.saude.go.gov.br/pentaho/api/repos/pentaho-cdf-dd/static/logo/logo_normal.png"
+        alt="Secretaria de Saúde de Goiás" style="max-width: 200px; margin-bottom: 15px;">
+      <p>&copy; 2025 Hospital Estadual de Jataí</p>
+    </footer>
+
+      <script>
+    // Variáveis globais
+    let dataAtual = new Date();
+    let dataSelecionada = null;
+    const slotsHorario = [];
+    let agendamentos = [];
+
+    // Gerar todos os horários de 30 em 30 minutos (24h)
+    for (let hora = 0; hora < 24; hora++) {
+      for (let minuto = 0; minuto < 60; minuto += 30) {
+        const horarioInicio = `${hora.toString().padStart(2, '0')}:${minuto.toString().padStart(2, '0')}`;
+        const horarioFim = (hora === 23 && minuto === 30) ? '23:59' : 
+                         `${hora.toString().padStart(2, '0')}:${(minuto + 29).toString().padStart(2, '0')}`;
+        slotsHorario.push({
+          inicio: horarioInicio,
+          fim: horarioFim,
+          display: horarioInicio
+        });
+      }
+    }
+
+    // Função para formatar data
+    function formatarData(data) {
+      if (!data) return '';
+      
+      if (typeof data === 'string' && data.includes('-')) {
+        const partes = data.split('-');
+        if (partes.length === 3) {
+          return `${partes[2]}/${partes[1]}/${partes[0]}`;
+        }
+      }
+      
+      const dataObj = new Date(data);
+      const dia = dataObj.getDate().toString().padStart(2, '0');
+      const mes = (dataObj.getMonth() + 1).toString().padStart(2, '0');
+      const ano = dataObj.getFullYear();
+      return `${dia}/${mes}/${ano}`;
+    }
+
+    // FUNÇÃO CORRIGIDA: Obter status de um slot específico
+    function obterStatusHorario(data, horario) {
+      const dataStr = typeof data === 'string' ? data : 
+                     `${data.getFullYear()}-${(data.getMonth() + 1).toString().padStart(2, '0')}-${data.getDate().toString().padStart(2, '0')}`;
+      
+      // Converter horário para minutos
+      const converterParaMinutos = (horario) => {
+        if (!horario) return 0;
+        const [hora, minuto] = horario.split(':').map(Number);
+        return hora * 60 + minuto;
+      };
+      
+      const slotInicioMinutos = converterParaMinutos(horario);
+      const slotFimMinutos = slotInicioMinutos + 29; // Slot de 30 minutos
+      
+      // Procurar por agendamentos que conflitem com este slot
+      const agendamentoConflitante = agendamentos.find(ag => {
+        if (!['pendente', 'aprovado'].includes(ag.status)) return false;
+        
+        const agDataInicio = ag.data_inicio;
+        const agDataFim = ag.data_fim || agDataInicio;
+        
+        // Verificar se a data está dentro do período do agendamento
+        if (dataStr < agDataInicio || dataStr > agDataFim) {
+          return false;
+        }
+        
+        const agInicioMinutos = converterParaMinutos(ag.horario_inicio);
+        const agFimMinutos = converterParaMinutos(ag.horario_fim);
+        
+        // LÓGICA CORRIGIDA:
+        if (agDataInicio === agDataFim) {
+          // CASO 1: Agendamento de um dia só
+          return !(slotFimMinutos <= agInicioMinutos || slotInicioMinutos >= agFimMinutos);
+        } else {
+          // CASO 2: Agendamento multi-dia
+          if (dataStr === agDataInicio) {
+            // Primeiro dia: ocupado apenas a PARTIR do horário de início do agendamento
+            return slotInicioMinutos >= agInicioMinutos;
+          } else if (dataStr === agDataFim) {
+            // Último dia: ocupado apenas ATÉ o horário de fim do agendamento
+            return slotFimMinutos <= agFimMinutos;
+          } else {
+            // Dias intermediários: SEMPRE ocupado
+            return true;
+          }
+        }
+      });
+      
+      return agendamentoConflitante ? agendamentoConflitante.status : null;
+    }
+
+    // FUNÇÃO CORRIGIDA: Verificar se um horário está ocupado
+    function horarioOcupado(data, horarioInicio, horarioFim, ignorarId = null) {
+      const dataStr = typeof data === 'string' ? data : 
+                     `${data.getFullYear()}-${(data.getMonth() + 1).toString().padStart(2, '0')}-${data.getDate().toString().padStart(2, '0')}`;
+      
+      // Converter para minutos
+      const converterParaMinutos = (horario) => {
+        if (!horario) return 0;
+        const [hora, minuto] = horario.split(':').map(Number);
+        return hora * 60 + minuto;
+      };
+      
+      const inicioMinutos = converterParaMinutos(horarioInicio);
+      const fimMinutos = converterParaMinutos(horarioFim);
+      
+      return agendamentos.some(agendamento => {
+        if (ignorarId && agendamento.id === ignorarId) return false;
+        if (!['pendente', 'aprovado'].includes(agendamento.status)) return false;
+        
+        const agDataInicio = agendamento.data_inicio;
+        const agDataFim = agendamento.data_fim || agDataInicio;
+        
+        // Verificar se há sobreposição de datas
+        if (dataStr < agDataInicio || dataStr > agDataFim) {
+          return false;
+        }
+        
+        const agInicioMinutos = converterParaMinutos(agendamento.horario_inicio);
+        const agFimMinutos = converterParaMinutos(agendamento.horario_fim);
+        
+        if (agDataInicio === agDataFim) {
+          // Um dia só: conflito se os intervalos se sobrepõem
+          return !(fimMinutos <= agInicioMinutos || inicioMinutos >= agFimMinutos);
+        } else {
+          // Multi-dia
+          if (dataStr === agDataInicio) {
+            // Primeiro dia: conflito se começar depois do início do agendamento
+            return inicioMinutos >= agInicioMinutos;
+          } else if (dataStr === agDataFim) {
+            // Último dia: conflito se terminar antes do fim do agendamento
+            return fimMinutos <= agFimMinutos;
+          } else {
+            // Dias intermediários: sempre conflito
+            return true;
+          }
+        }
+      });
+    }
+
+    // FUNÇÃO: Atualizar visualização dos horários
+    async function atualizarVisualizacaoHorarios() {
+      const dataInicio = document.getElementById('data_inicio').value;
+      const dataFim = document.getElementById('data_fim').value;
+      const horarioInicio = document.getElementById('horario_inicio').value;
+      const horarioFim = document.getElementById('horario_fim').value;
+      
+      const grid = document.getElementById('timeSlotsGrid');
+      grid.innerHTML = '';
+      
+      if (!dataInicio) return;
+      
+      // Validar intervalo
+      if (horarioInicio && horarioFim) {
+        validarIntervaloDataHora(dataInicio, dataFim, horarioInicio, horarioFim);
+      }
+      
+      // Mostrar informações do intervalo selecionado
+      if (horarioInicio && horarioFim && dataInicio && dataFim) {
+        document.getElementById('timeRangeInfo').style.display = 'block';
+        let textoIntervalo = '';
+        
+        if (dataFim !== dataInicio) {
+          textoIntervalo = `${formatarData(dataInicio)} ${horarioInicio} - ${formatarData(dataFim)} ${horarioFim}`;
+        } else {
+          textoIntervalo = `${formatarData(dataInicio)} ${horarioInicio} - ${horarioFim}`;
+        }
+        
+        document.getElementById('selectedRange').textContent = textoIntervalo;
+      } else {
+        document.getElementById('timeRangeInfo').style.display = 'none';
+      }
+      
+      // Renderizar visualização dos horários
+      const dataSelecionadaObj = new Date(dataInicio);
+      
+      for (let slot of slotsHorario) {
+        const divSlot = document.createElement('div');
+        
+        // Verificar status do horário
+        const status = obterStatusHorario(dataInicio, slot.inicio);
+        let classeStatus = '';
+        let textoStatus = '';
+        
+        if (status === 'aprovado') {
+          classeStatus = 'occupied';
+          textoStatus = 'Ocupado';
+        } else if (status === 'pendente') {
+          classeStatus = 'pending';
+          textoStatus = 'Pendente';
+        }
+        
+        // Verificar se está no intervalo selecionado
+        let noIntervalo = false;
+        let rangeStart = false;
+        let rangeEnd = false;
+        
+        if (horarioInicio && horarioFim && dataInicio && dataFim && dataInicio === dataFim) {
+          const slotTime = new Date(`2000-01-01T${slot.inicio}:00`);
+          const inicioTime = new Date(`2000-01-01T${horarioInicio}:00`);
+          const fimTime = new Date(`2000-01-01T${horarioFim}:00`);
+          
+          noIntervalo = slotTime >= inicioTime && slotTime < fimTime;
+          rangeStart = slot.inicio === horarioInicio;
+          rangeEnd = slot.fim === horarioFim;
+        }
+        
+        // Aplicar classes CSS baseadas no status e seleção
+        let classes = 'time-slot';
+        
+        if (classeStatus) {
+          classes += ` ${classeStatus}`;
+        } else if (rangeStart) {
+          classes += ' range-start';
+        } else if (rangeEnd) {
+          classes += ' range-end';
+        } else if (noIntervalo) {
+          classes += ' in-range';
+        }
+        
+        divSlot.className = classes;
+        
+        // Conteúdo do slot
+        divSlot.innerHTML = `
+          ${slot.inicio}
+          <div class="time-slot-status">${slot.inicio}-${slot.fim} ${textoStatus ? `- ${textoStatus}` : ''}</div>
+        `;
+        
+        // Adicionar evento de clique apenas se não estiver ocupado
+        if (!classeStatus) {
+          divSlot.onclick = () => {
+            const currentInicio = document.getElementById('horario_inicio').value;
+            const currentFim = document.getElementById('horario_fim').value;
+            
+            if (!currentInicio || (currentInicio && currentFim)) {
+              document.getElementById('horario_inicio').value = slot.inicio;
+              document.getElementById('horario_fim').value = '';
+            } else if (currentInicio && !currentFim) {
+              if (slot.inicio > currentInicio) {
+                document.getElementById('horario_fim').value = slot.fim;
+              } else {
+                document.getElementById('horario_inicio').value = slot.inicio;
+                document.getElementById('horario_fim').value = currentInicio;
+              }
+            }
+            
+            atualizarVisualizacaoHorarios();
+          };
+        }
+        
+        grid.appendChild(divSlot);
+      }
+    }
+
+    // FUNÇÃO: Renderizar calendário
+    async function renderizarCalendario() {
+      const ano = dataAtual.getFullYear();
+      const mes = dataAtual.getMonth();
+
+      const nomesMeses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+      document.getElementById('calendarMonth').textContent = `${nomesMeses[mes]} ${ano}`;
+
+      const grid = document.getElementById('calendarGrid');
+      grid.innerHTML = '';
+
+      const diasSemana = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+      diasSemana.forEach(dia => {
+        const cabecalho = document.createElement('div');
+        cabecalho.className = 'calendar-day-header';
+        cabecalho.textContent = dia;
+        grid.appendChild(cabecalho);
+      });
+
+      const primeiroDia = new Date(ano, mes, 1).getDay();
+      const ultimoDia = new Date(ano, mes + 1, 0).getDate();
+      const hoje = new Date();
+      hoje.setHours(0, 0, 0, 0);
+
+      // Contar agendamentos por dia
+      const agendamentosPorDia = {};
+      
+      agendamentos.forEach(agendamento => {
+        if (['pendente', 'aprovado'].includes(agendamento.status)) {
+          const agDataInicio = agendamento.data_inicio;
+          const agDataFim = agendamento.data_fim || agDataInicio;
+          
+          let dataAtual = new Date(agDataInicio);
+          while (dataAtual <= new Date(agDataFim)) {
+            const chave = dataAtual.toISOString().split('T')[0];
+            
+            if (!agendamentosPorDia[chave]) {
+              agendamentosPorDia[chave] = 0;
+            }
+            agendamentosPorDia[chave]++;
+            
+            dataAtual.setDate(dataAtual.getDate() + 1);
+          }
+        }
+      });
+
+      for (let i = 0; i < primeiroDia; i++) {
+        const diaVazio = document.createElement('div');
+        diaVazio.className = 'calendar-day disabled';
+        grid.appendChild(diaVazio);
+      }
+
+      for (let dia = 1; dia <= ultimoDia; dia++) {
+        const dataDia = new Date(ano, mes, dia);
+        const dataDiaStr = dataDia.toISOString().split('T')[0];
+        const divDia = document.createElement('div');
+        divDia.className = 'calendar-day';
+        divDia.textContent = dia;
+
+        if (dataDia < hoje) {
+          divDia.classList.add('disabled');
+        } else {
+          divDia.onclick = () => selecionarData(dataDia);
+        }
+
+        // Verificar se tem agendamentos
+        if (agendamentosPorDia[dataDiaStr]) {
+          divDia.classList.add('has-bookings');
+        }
+
+        // Verificar se está no intervalo selecionado
+        const dataInicio = document.getElementById('data_inicio').value;
+        const dataFim = document.getElementById('data_fim').value;
+        
+        if (dataInicio && dataFim) {
+          const dataDiaISO = dataDia.toISOString().split('T')[0];
+          const inicioISO = dataInicio;
+          const fimISO = dataFim;
+          
+          if (dataDiaISO >= inicioISO && dataDiaISO <= fimISO) {
+            divDia.classList.add('in-range');
+          }
+        }
+
+        if (dataSelecionada && dataDia.toDateString() === dataSelecionada.toDateString()) {
+          divDia.classList.add('selected');
+        }
+
+        grid.appendChild(divDia);
+      }
+    }
+
+    // FUNÇÃO: Selecionar data
+    async function selecionarData(data) {
+      dataSelecionada = data;
+      await renderizarCalendario();
+      
+      const dataString = `${data.getFullYear()}-${(data.getMonth() + 1).toString().padStart(2, '0')}-${data.getDate().toString().padStart(2, '0')}`;
+      document.getElementById('data_inicio').value = dataString;
+      document.getElementById('data_fim').value = dataString;
+      document.getElementById('horario_inicio').value = '';
+      document.getElementById('horario_fim').value = '';
+      document.getElementById('timeRangeInfo').style.display = 'none';
+      document.getElementById('horarioFimError').classList.remove('show');
+      document.getElementById('dataFimError').classList.remove('show');
+      
+      document.getElementById('timeSlotsSection').classList.add('active');
+      await atualizarVisualizacaoHorarios();
+    }
+
+    // FUNÇÃO: Mudar mês
+    async function mudarMes(delta) {
+      dataAtual.setMonth(dataAtual.getMonth() + delta);
+      await renderizarCalendario();
+      document.getElementById('timeSlotsSection').classList.remove('active');
+      dataSelecionada = null;
+      document.getElementById('data_inicio').value = '';
+      document.getElementById('data_fim').value = '';
+      document.getElementById('horario_inicio').value = '';
+      document.getElementById('horario_fim').value = '';
+    }
+
+    // FUNÇÃO: Resetar formulário
+    function resetarFormulario() {
+      document.getElementById('bookingForm').reset();
+      document.getElementById('data_inicio').value = '';
+      document.getElementById('data_fim').value = '';
+      document.getElementById('horario_inicio').value = '';
+      document.getElementById('horario_fim').value = '';
+      document.getElementById('timeSlotsSection').classList.remove('active');
+      document.getElementById('timeRangeInfo').style.display = 'none';
+      dataSelecionada = null;
+      renderizarCalendario();
+    }
+
+    // FUNÇÃO: Fechar modal e resetar
+    function fecharModalEResetar() {
+      document.getElementById('successModal').classList.remove('active');
+      resetarFormulario();
+    }
+
+    // FUNÇÃO: Atualizar automaticamente os horários
+    function atualizarHorariosAutomaticamente() {
+      const dataInicio = document.getElementById('data_inicio').value;
+      const dataFim = document.getElementById('data_fim').value;
+      
+      if (dataInicio && dataFim) {
+        document.getElementById('timeSlotsSection').classList.add('active');
+        atualizarVisualizacaoHorarios();
+        renderizarCalendario();
+      }
+    }
+
+    // FUNÇÃO: Validar intervalo de datas e horários
+    function validarIntervaloDataHora(dataInicio, dataFim, horarioInicio, horarioFim) {
+      const erroDataFim = document.getElementById('dataFimError');
+      const erroHorarioFim = document.getElementById('horarioFimError');
+      
+      erroDataFim.classList.remove('show');
+      erroHorarioFim.classList.remove('show');
+
+      let valido = true;
+
+      // Validar datas
+      if (!dataFim || dataFim.trim() === '') {
+        erroDataFim.textContent = 'A data de término é obrigatória';
+        erroDataFim.classList.add('show');
+        valido = false;
+      } else if (dataFim < dataInicio) {
+        erroDataFim.textContent = 'A data de término deve ser posterior ou igual à data de início';
+        erroDataFim.classList.add('show');
+        valido = false;
+      }
+
+      // Validar horários no mesmo dia
+      if (dataFim === dataInicio && horarioFim <= horarioInicio) {
+        erroHorarioFim.textContent = 'O horário de término deve ser posterior ao horário de início';
+        erroHorarioFim.classList.add('show');
+        valido = false;
+      }
+
+      // Verificar conflitos com agendamentos existentes
+      if (valido && dataInicio && dataFim && horarioInicio && horarioFim) {
+        // Verificar cada dia no intervalo
+        const dataInicioObj = new Date(dataInicio);
+        const dataFimObj = new Date(dataFim);
+        
+        let dataAtual = new Date(dataInicioObj);
+        while (dataAtual <= dataFimObj) {
+          const dataAtualStr = dataAtual.toISOString().split('T')[0];
+          
+          // Para cada dia, determinar os horários a verificar
+          let horarioInicioParaDia = horarioInicio;
+          let horarioFimParaDia = horarioFim;
+          
+          if (dataAtualStr === dataInicio && dataAtualStr !== dataFim) {
+            // Primeiro dia de multi-dia: verificar apenas a partir do horário de início
+          } else if (dataAtualStr === dataFim && dataAtualStr !== dataInicio) {
+            // Último dia de multi-dia: verificar apenas até o horário de fim
+          } else if (dataAtualStr > dataInicio && dataAtualStr < dataFim) {
+            // Dias intermediários: verificar dia completo
+            horarioInicioParaDia = '00:00';
+            horarioFimParaDia = '23:59';
+          }
+          
+          const conflito = horarioOcupado(dataAtualStr, horarioInicioParaDia, horarioFimParaDia);
+          if (conflito) {
+            const dataFormatada = formatarData(dataAtualStr);
+            erroHorarioFim.textContent = `Conflito de horário no dia ${dataFormatada}`;
+            erroHorarioFim.classList.add('show');
+            valido = false;
+            break;
+          }
+          
+          dataAtual.setDate(dataAtual.getDate() + 1);
+        }
+      }
+
+      return valido;
+    }
+
+    // FUNÇÃO: Carregar agendamentos do servidor
+    async function carregarAgendamentosDoServidor() {
+      try {
+        const resposta = await fetch('get_bookings.php');
+        const dados = await resposta.json();
+        
+        if (dados.success && dados.agendamentos) {
+          console.log('Agendamentos carregados:', dados.agendamentos);
+          agendamentos = dados.agendamentos;
+          return dados.agendamentos;
+        }
+        return [];
+      } catch (erro) {
+        console.error('Erro ao carregar do servidor:', erro);
+        return [];
+      }
+    }
+
+    // FUNÇÃO: Preencher selects de horário
+    function preencherSelectsHorario() {
+      const selectInicio = document.getElementById('horario_inicio');
+      const selectFim = document.getElementById('horario_fim');
+      
+      selectInicio.innerHTML = '<option value="">Selecione o início</option>';
+      selectFim.innerHTML = '<option value="">Selecione o término</option>';
+      
+      slotsHorario.forEach(slot => {
+        const opcaoInicio = document.createElement('option');
+        opcaoInicio.value = slot.inicio;
+        opcaoInicio.textContent = slot.inicio;
+        selectInicio.appendChild(opcaoInicio);
+        
+        const opcaoFim = document.createElement('option');
+        opcaoFim.value = slot.fim;
+        opcaoFim.textContent = slot.fim;
+        selectFim.appendChild(opcaoFim);
+      });
+    }
+
+    // EVENT LISTENER: Envio do formulário
+    document.getElementById('bookingForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      
+      const botaoEnviar = document.getElementById('submitBtn');
+      botaoEnviar.disabled = true;
+      botaoEnviar.textContent = 'Enviando...';
+
+      // Coletar dados do formulário
+      const dadosFormulario = {
+        data_inicio: document.getElementById('data_inicio').value,
+        data_fim: document.getElementById('data_fim').value,
+        horario_inicio: document.getElementById('horario_inicio').value,
+        horario_fim: document.getElementById('horario_fim').value,
+        nome: document.getElementById('nome').value,
+        setor: document.getElementById('setor').value,
+        celular: document.getElementById('celular').value,
+        email: document.getElementById('email').value,
+        descricao: document.getElementById('descricao').value
+      };
+
+      // Validar campos obrigatórios
+      const camposObrigatorios = [
+        { campo: dadosFormulario.data_inicio, nome: 'Data de Início' },
+        { campo: dadosFormulario.data_fim, nome: 'Data de Término' },
+        { campo: dadosFormulario.horario_inicio, nome: 'Horário de Início' },
+        { campo: dadosFormulario.horario_fim, nome: 'Horário de Término' },
+        { campo: dadosFormulario.nome, nome: 'Nome Completo' },
+        { campo: dadosFormulario.setor, nome: 'Setor' },
+        { campo: dadosFormulario.celular, nome: 'Celular' },
+        { campo: dadosFormulario.email, nome: 'E-mail' },
+        { campo: dadosFormulario.descricao, nome: 'Descrição do Evento' }
+      ];
+
+      const camposVazios = camposObrigatorios.filter(item => !item.campo || item.campo.trim() === '');
+
+      if (camposVazios.length > 0) {
+        const nomesCampos = camposVazios.map(item => item.nome).join(', ');
+        alert(`Por favor, preencha os seguintes campos obrigatórios: ${nomesCampos}`);
+        botaoEnviar.disabled = false;
+        botaoEnviar.textContent = 'Enviar Solicitação de Agendamento';
+        return;
+      }
+
+      // Validar intervalo
+      if (!validarIntervaloDataHora(
+        dadosFormulario.data_inicio, 
+        dadosFormulario.data_fim, 
+        dadosFormulario.horario_inicio, 
+        dadosFormulario.horario_fim
+      )) {
+        botaoEnviar.disabled = false;
+        botaoEnviar.textContent = 'Enviar Solicitação de Agendamento';
+        return;
+      }
+
+      try {
+        console.log('Enviando dados para save_booking.php');
+        console.log('Dados enviados:', dadosFormulario);
+
+        const formData = new FormData();
+        for (const [chave, valor] of Object.entries(dadosFormulario)) {
+          formData.append(chave, valor);
+        }
+
+        const resposta = await fetch('save_booking.php', {
+          method: 'POST',
+          body: formData
+        });
+        
+        console.log('Resposta recebida:', resposta);
+        
+        const textoResposta = await resposta.text();
+        console.log('Resposta bruta:', textoResposta);
+        
+        let resultado;
+        try {
+          resultado = JSON.parse(textoResposta);
+        } catch (erroParse) {
+          console.error('Erro ao parsear JSON:', erroParse);
+          throw new Error('Resposta inválida do servidor');
+        }
+        
+        if (resultado.success) {
+          await carregarAgendamentosDoServidor();
+          await renderizarCalendario();
+          
+          document.getElementById('successModal').classList.add('active');
+        } else {
+          throw new Error(resultado.error || 'Erro desconhecido ao enviar solicitação');
+        }
+      } catch (erro) {
+        console.error('Erro detalhado:', erro);
+        alert('Erro ao enviar solicitação: ' + erro.message);
+      } finally {
+        botaoEnviar.disabled = false;
+        botaoEnviar.textContent = 'Enviar Solicitação de Agendamento';
+      }
+    });
+
+    // EVENT LISTENERS para atualização em tempo real
+    document.getElementById('data_inicio').addEventListener('change', function() {
+      const dataInicio = this.value;
+      const dataFim = document.getElementById('data_fim').value;
+      
+      if (!dataFim || dataFim < dataInicio) {
+        document.getElementById('data_fim').value = dataInicio;
+      }
+      
+      atualizarHorariosAutomaticamente();
+    });
+
+    document.getElementById('data_fim').addEventListener('change', atualizarHorariosAutomaticamente);
+    document.getElementById('horario_inicio').addEventListener('change', atualizarVisualizacaoHorarios);
+    document.getElementById('horario_fim').addEventListener('change', atualizarVisualizacaoHorarios);
+
+    // INICIALIZAÇÃO
+    document.addEventListener('DOMContentLoaded', async function() {
+      const hoje = new Date().toISOString().split('T')[0];
+      document.getElementById('data_inicio').setAttribute('min', hoje);
+      document.getElementById('data_fim').setAttribute('min', hoje);
+
+      await carregarAgendamentosDoServidor();
+      
+      preencherSelectsHorario();
+      await renderizarCalendario();
+      
+      console.log('Sistema de agendamento iniciado com calendário e horários corrigidos');
+    });
+  </script>
+  </body>
+
+</html>

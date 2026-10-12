@@ -1,2 +1,2 @@
 # intranet-HEJ
-Serviço de atalhos + agendamento de uso do auditório criado para o Hospital Estadual de Jataí
+Repositório para Intranet desenvolvida durante meu estágio no Hospital Estadual de Jataí

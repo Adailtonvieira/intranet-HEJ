@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intranet - Hospital Estadual de Jataí</title>
+  <link rel="icon" type="image/png" href="Nova Logo HEJ Reduzido Branco.png">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      color: #333;
+    }
+
+    /* ======== CABEÇALHO ======== */
+    header {
+      background: #00766f;
+      color: white;
+      margin-bottom: 40px;
+      position: relative;
+      box-shadow: 0 4px 20px rgba(0, 118, 111, 0.3);
+    }
+
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: #FFD700;
+    }
+
+    .header-content {
+      display: flex;
+      align-items: stretch;
+      justify-content: space-between;
+      min-height: 110px;
+      position: relative;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex: 1;
+      z-index: 2;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding-left: 100px;
+    }
+
+    .logo img {
+      height: 55px;
+      display: block;
+      cursor: pointer;
+    }
+
+    .header-text h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+
+    .header-text p {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .header-right-logo {
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 20px 20px 20px;
+      border-top-left-radius: 25px;
+      border-bottom-left-radius: 25px;
+      flex-shrink: 0;
+      height: 100%;
+      box-sizing: border-box;
+    }
+
+    .header-right-logo img {
+      height: 85px;
+      display: block;
+      max-width: 100%;
+      object-fit: contain;
+    }
+
+    /* ======== CONTEÚDO ======== */
+    .container {
+      max-width: 1400px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    /* New grid layout with featured Portal AGIR card */
+    .systems-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 20px;
+      justify-items: center;
+    }
+    
+    /* Featured card - Portal AGIR */
+    .system-card.featured {
+      grid-column: span 2;
+      grid-row: span 2;
+      width: 100%;
+      max-width: 440px;
+      height: auto;
+      border: 3px solid #00766f;
+      box-shadow: 0 8px 24px rgba(0, 118, 111, 0.25);
+    }
+    
+    .system-card.featured:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 32px rgba(0, 118, 111, 0.35);
+    }
+    
+    .system-card.featured .card-image {
+      height: 240px;
+      background: linear-gradient(135deg, #f5f5f5 0%, #e8f5f4 100%);
+    }
+    
+    .system-card.featured .card-image img {
+      width: 200px;
+    }
+    
+    .system-card.featured .card-content {
+      padding: 24px;
+      gap: 16px;
+    }
+    
+    .system-card.featured .card-content h2 {
+      font-size: 1.8rem;
+      color: #00766f;
+      font-weight: bold;
+    }
+    
+    .system-card.featured .card-button {
+      padding: 14px 28px;
+      font-size: 1.1rem;
+      background: #00766f;
+    }
+    
+    .system-card.featured .card-button:hover {
+      background: #005a54;
+    }
+    /* </CHANGE> */
+    
+    .system-card {
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      width: 200px;
+      background: #fff;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .system-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    
+    .card-image {
+      width: 100%;
+      height: 120px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f5f5f5;
+    }
+    
+    .card-image img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      mix-blend-mode: multiply;
+    }
+    
+    .card-content {
+      padding: 12px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .card-content h2 {
+      font-size: 1.1rem;
+      margin: 0;
+      color: #333;
+    }
+    
+    .card-button {
+      background: #00766f;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 6px;
+      display: inline-block;
+      font-weight: 500;
+      transition: background 0.2s;
+      font-size: 0.9rem;
+    }
+    
+    .card-button:hover {
+      background: #005a54;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: #00766f;
+      margin-top: 60px;
+      border-top: 2px solid #ddd;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 1200px) {
+      .systems-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    
+    @media (max-width: 900px) {
+      .systems-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      
+      .system-card.featured {
+        grid-column: span 3;
+      }
+    }
+    
+    @media (max-width: 600px) {
+      .systems-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .system-card.featured {
+        grid-column: span 2;
+      }
+    }
+    /* </CHANGE> */
+  </style>
+</head>
+<body>
+
+<!-- TUDO COMEA AQUI -->
+  <header>
+    <div class="header-content">
+      <div class="header-left">
+        <div class="logo" onclick="location.reload()" title="Clique para atualizar a página">
+           <img src="HEJ.png" alt="Logo HEJ"alt="Logo HEJ" style="width: 120px; height: 50px; display: block; margin: 0 auto;">
+        </div>
+        <div class="header-text">
+          <h1><b>INTRANET - Hospital Estadual de Jataí</b></h1>
+          <p>Portal de Acesso Rápido aos Sistemas Hospitalares</p>
+        </div>
+      </div>
+
+      <div class="header-right-logo">
+        <img src="logo-HEJ-SES-GO.jpg" alt="Logo Governo de Goiás" style="width: 450px; height: auto; display: block; margin: 0 auto;">
+      </div>
+    </div>
+  </header>
+
+  <!-- ======== CONTEÚDO PRINCIPAL ======== -->
+  <div class="container">
+    <div class="systems-grid">
+      
+      <!-- Portal AGIR moved to first position with featured styling -->
+      <!-- Portal AGIR -->
+      <a href="https://portal.agirsaude.org.br/portal/" target="_blank" rel="noopener noreferrer" class="system-card featured">
+        <div class="card-image">
+          <img src="logo-agir.png" alt="Portal AGIR" style="width: 200px; height: auto; display: block; margin: 0 auto;">
+        </div>
+        <div class="card-content">
+          <h2>Portal AGIR</h2>
+          <div class="card-button" title="Clique para ir para o Portal Agir Saúde">Acessar</div>
+        </div>
+      </a>
+      <!-- </CHANGE> -->
+
+      <!-- MV SOUL -->
+      <a href="http://mvprd.saude.go.gov.br/" target="_blank" rel="noopener noreferrer" class="system-card">
+        <div class="card-image">
+          <img src="logo-mv.png" alt="Sistema MV" style="width: 120px; height: auto; display: block; margin: 0 auto;">
+        </div>
+        <div class="card-content">
+          <h2>MV SOUL</h2>
+          <div class="card-button" title="Clique para ir para o Sistema MV">Acessar</div>
+        </div>
+      </a>
+
+      <!-- PEP MV -->
+      <a href="http://mvpepprd.saude.go.gov.br" target="_blank" rel="noopener noreferrer" class="system-card">
+        <div class="card-image">
+          <img src="logo-PEP.png" alt="PEP MV" style="width: 120px; height: auto; display: block; margin: 0 auto;">
+        </div>
+        <div class="card-content">
+          <h2>MV PEP</h2>
+          <div class="card-button" title="Clique para ir para o PEP">Acessar</div>
+        </div>
+      </a>
+
+      <!-- GLPI -->
+      <a href="https://chamadosti.agirsaude.org.br/glpi/" target="_blank" rel="noopener noreferrer" class="system-card">
+        <div class="card-image">
+          <img src="logo-glpi.png" alt="GLPI" style="width: 120px; height: auto; display: block; margin: 0 auto;">
+        </div>
+        <div class="card-content">
+          <h2>GLPI - CHAMADOS</h2>
+          <div class="card-button" title="Clique para ir para o GLPI - CHAMADOS T.I">Acessar</div>
+        </div>
+      </a>
+
+      <!-- PACS -->
+      <a href="http://192.168.100.110/login" target="_blank" rel="noopener noreferrer" class="system-card">
+        <div class="card-image">
+          <img 
+            src="logo-animat.png" alt="ANIMATI netPACS" style="width: 120px; height: auto; display: block; margin: 0 auto;"
+          >
+        </div>
+        <div class="card-content">
+          <h2>PACS</h2>
+          <div class="card-button" title="Clique para ir para o PACS">Acessar</div>
+        </div>
+      </a>
+
+      <!-- MaqON -->
+      <a href="http://192.168.16.21:8087/chamados_maqueiro/index.php" target="_blank" rel="noopener noreferrer" class="system-card">
+        <div class="card-image">
+          <img src="logo-maqon-png.png" alt="MaqON" style="width: 120px; height: auto; display: block; margin: 0 auto;">
+        </div>
+        <div class="card-content">
+          <h2>MaqON</h2>
+          <div class="card-button" title="Clique para ir para o Maq-ON">Acessar</div>
+        </div>
+      </a>
+
+      <!-- Reservar Auditório -->
+      <a href="http://192.168.13.93/agendamento.html" target="_blank" rel="noopener noreferrer" class="system-card">
+        <div class="card-image">
+          <img src="placa-de-sinalizacao-indicativa-auditorio-reservas.webp" alt="Reservar Auditório">
+        </div>
+        <div class="card-content">
+          <h2>Reservar Auditório</h2>
+          <div class="card-button" title="Clique para agendar reserva do auditório">Acessar</div>
+        </div>
+      </a>
+
+      <!-- Administração Reservas Auditório -->
+      <a href="http://192.168.13.93/adm.php" target="_blank" rel="noopener noreferrer" class="system-card">
+        <div class="card-image">
+          <img src="placa-de-sinalizacao-auditorio-adm.webp" alt="Reservar Auditório">
+        </div>
+        <div class="card-content">
+          <h2>Gerênciar Reservas</h2>
+          <div class="card-button" title="Clique para agendar reserva do auditório">Acessar</div>
+        </div>
+      </a>
+      
+      <!-- Web-mail -->
+      <a href="https://webmail.skymail.com.br/?_task=login" target="_blank" rel="noopener noreferrer" class="system-card">
+        <div class="card-image">
+          <img src="logo-skymail.png" alt="Web-mail">
+        </div>
+        <div class="card-content">
+          <h2>Web-mail</h2>
+          <div class="card-button" title="Clique para ir para o Skymail">Acessar</div>
+        </div>
+      </a>
+
+      <!-- MV Portaria -->
+      <a href="http://mverpprd.saude.go.gov.br/mvportaria/index_appletless.html" target="_blank" rel="noopener noreferrer" class="system-card">
+        <div class="card-image">
+          <img src="logo-mvsoul.png" alt="MV Portaria" style="width: 120px; height: auto; display: block; margin: 0 auto;">
+        </div>
+        <div class="card-content">
+          <h2>MV Portaria</h2>
+          <div class="card-button" title="Clique para ir para o MV PORTARIA">Acessar</div>
+        </div>
+      </a>
+
+      <!-- Tableau -->
+      <a href="https://prod-useast-a.online.tableau.com/#/site/agirassociacaodegestaoinovacaoeresultadosemsaude/home" target="_blank" rel="noopener noreferrer" class="system-card">
+        <div class="card-image">
+          <img src="logo-tableau.png" alt="Tableau" style="width: 120px; height: auto; display: block; margin: 0 auto;">
+        </div>
+        <div class="card-content">
+          <h2>Tableau</h2>
+          <div class="card-button" title="Clique para ir para o Tableau">Acessar</div>
+        </div>
+      </a>
+
+      <!-- Gestão de Leitos -->
+      <a href="https://gestaoleitos.agirsaude.org.br/" target="_blank" rel="noopener noreferrer" class="system-card">
+        <div class="card-image">
+          <img src="logo-glpi.png" alt="Gestão de Leitos" style="width: 120px; height: auto; display: block; margin: 0 auto;">
+        </div>
+        <div class="card-content">
+          <h2>Gestão de Leitos</h2>
+          <div class="card-button" title="Clique para ir para Gestão de Leitos">Acessar</div>
+        </div>
+      </a>
+
+      <!-- EPIMED MONITOR -->
+      <a href="https://sso.epimedmonitor.com/Account/Login?AccessCountry=BR" target="_blank" rel="noopener noreferrer" class="system-card">
+        <div class="card-image">
+          <img src="logo-epimed.png" alt="Gestão de Leitos">
+        </div>
+        <div class="card-content">
+          <h2>EpiMed Monitor</h2>
+          <div class="card-button" title="Clique para ir para Epimed Monitor">Acessar</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+  <footer>
+    <img src="logo-sus.png" alt="Secretaria de Saúde de Goiás" style="max-width: 300px; margin-bottom: 20px; display: block; margin-left: auto; margin-right: auto;">
+    <p>&copy; 2025 Hospital Estadual de Jataí</p>
+  </footer>
+</body>
+</html>
